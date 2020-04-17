@@ -26,6 +26,8 @@ In `package.json`, add a script to find unused files:
 
 Run the script to list any unused files: `yarn find:unused`.
 
+<br />
+
 ### Configuration
 
 Add a property to your `package.json` to configure next-unused:
@@ -48,6 +50,8 @@ Add a property to your `package.json` to configure next-unused:
 | `include`     | string[] | `['pages']` | list of directories to search through. `pages` is always included      |
 | `exclude`     | string[] | `[]`        | array of RegExp that exclude matching filenames                        |
 | `entrypoints` | string[] | `['pages']` | list of directories to use as entrypoints. `pages` is always included  |
+
+<br />
 
 ### Credits
 
