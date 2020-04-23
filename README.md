@@ -60,8 +60,8 @@ Your Next.js setup looks like this:
 ```
 package.json
 ├─ pages/
-   ├─ index.js
-├─ components/
+│  ├─ index.js
+└─ components/
    ├─ button.js
    └─ image.js
 ```
@@ -78,7 +78,7 @@ export default () => {
 }
 ```
 
-Configure `next-unsued` to include the `components` directory in `package.json`:
+Configure `next-unused` to include the `components` directory in `package.json`:
 
 ```json
 {
