@@ -53,6 +53,50 @@ Add a property to your `package.json` to configure next-unused:
 
 <br />
 
+### Example
+
+Your Next.js setup looks like this:
+
+```
+package.json
+├─ pages/
+   ├─ index.js
+├─ components/
+   ├─ button.js
+   └─ image.js
+```
+
+And your `pages/index.js` contains:
+
+```js
+import Button from '../components/button'
+
+export default () => {
+  return (
+    <Button>Click me</Button>
+  )
+}
+```
+
+Configure `next-unsued` to include the `components` directory in `package.json`:
+
+```json
+{
+  "next-unused": {
+    "include": ["components"]
+  }
+}
+```
+
+Running `next-unused` will output:
+
+```
+Found 1 unused file:
+components/image.js
+```
+
+<br />
+
 ### Credits
 
 Shu and Luc wrote the initial version of this script.
