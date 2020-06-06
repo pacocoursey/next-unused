@@ -1,3 +1,6 @@
+const path = require("path");
+const userConfig =
+  require(path.resolve(process.cwd(), "package.json"))["next-unused"] || {};
 const { alias } = userConfig;
 
 if (alias) {

@@ -3,24 +3,6 @@ const madge = require("madge");
 const path = require("path");
 const packageJSON = require(path.resolve(process.cwd(), "package.json"));
 
-interface Alias {
-  [input: string]: string
-}
-
-interface Config {
-  debug?: boolean;
-  include?: string[];
-  exclude?: string[];
-  entrypoints?: string[];
-  alias?: Alias
-}
-
-interface Tree {
-  [filename: string]: string[]
-}
-
-const userConfig: Config = packageJSON["next-unused"] || {};
-
 try {
   main();
 } catch (e) {
@@ -28,6 +10,8 @@ try {
 }
 
 function main() {
+  const userConfig = packageJSON["next-unused"] || {};
+
   const {
     debug,
     include = [],
@@ -74,10 +58,20 @@ function main() {
     console.log(`[debug] Using exclude regex: ${[searchDirs, ...exclude]}`);
   }
 
-  madge(process.cwd(), {
+  const madgePath = [
+    path.resolve(process.cwd(), "pages"),
+  ]
+
+  include.forEach((inc) => {
+    madgePath.push(path.resolve(process.cwd(), inc))
+  })
+
+  madge(madgePath, {
     webpackConfig: path.resolve(__dirname, "madge.webpack.js"),
-    excludeRegExp: [searchDirs, ...exclude],
-  }).then((res: any) => {
+    tsConfig: path.resolve(process.cwd(), "tsconfig.json"),
+    excludeRegExp: [searchDirs, ...exclude, "(^|\/)(\.(?!\.).+)$"],
+    fileExtensions: ["js", "jsx", "ts", "tsx"],
+  }).then((res) => {
     const tree = res.obj();
     const entrypoints = Object.keys(tree).filter((f) => {
       return (
@@ -90,7 +84,7 @@ function main() {
       console.log(entrypoints);
     }
     if (!entrypoints.length) {
-      return console.log("No unused files!");
+      return console.log("No entrypoints found.");
     }
     pruneTree(entrypoints, tree);
     const unusedFilenames = Object.keys(tree);
@@ -107,7 +101,7 @@ function main() {
   });
 }
 
-function pruneTree(subtree: string[], tree: Tree) {
+function pruneTree(subtree, tree) {
   if (!subtree || subtree.length === 0) return;
 
   for (let child of subtree) {

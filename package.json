@@ -1,24 +1,20 @@
 {
   "name": "next-unused",
-  "version": "0.0.1",
-  "main": "index.ts",
-  "types": "dist/index.d.ts",
+  "version": "0.0.2",
+  "main": "index.js",
   "license": "MIT",
   "bin": {
-    "next-unused": "./dist/index.js"
+    "next-unused": "./index.js"
   },
   "files": [
-    "dist"
+    "index.js",
+    "madge.webpack.js"
   ],
-  "scripts": {
-    "build": "rm -rf dist && tsc"
-  },
   "dependencies": {
     "madge": "^3.8.0",
     "ts-loader": "^7.0.0"
   },
   "devDependencies": {
-    "@types/node": "^13.11.1",
-    "typescript": "^3.8.3"
+    "@types/node": "^13.11.1"
   }
 }
