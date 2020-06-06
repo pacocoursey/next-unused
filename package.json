@@ -16,5 +16,7 @@
   },
   "devDependencies": {
     "@types/node": "^13.11.1"
-  }
+  },
+  "author": "@pacocoursey",
+  "repository": "pacocoursey/next-unused"
 }
