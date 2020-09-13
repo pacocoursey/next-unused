@@ -46,30 +46,28 @@ function main() {
     }
   }
 
-  const userSearchDirs = include.length ? include.join('|') : ''
-
-  const searchDirs = new RegExp(
-    `^(?!(${
-      userSearchDirs.includes('pages') ? '' : 'pages|'
-    }${userSearchDirs}))`,
-    'i'
-  )
-
-  if (debug === true) {
-    console.log(`[debug] Using exclude regex: ${[searchDirs, ...exclude]}`)
-  }
-
   // Automatically include top level pages/ directory by default
   const topLevelPagesPath = path.resolve(process.cwd(), 'pages')
+  const hasTopLevelPages = fs.existsSync(topLevelPagesPath)
   const madgePath = []
 
-  if (fs.existsSync(topLevelPagesPath)) {
-    madgePath.push(topLevelPagesPath)
+  if (hasTopLevelPages) {
+    if (!include.includes('pages')) {
+      include.push('pages')
+    }
   }
 
   include.forEach((inc) => {
     madgePath.push(path.resolve(process.cwd(), inc))
   })
+
+  // Negative lookahead – ignore searching for any files
+  // that aren't part of our include list
+  const searchDirs = new RegExp(`^(?!(${include.join('|')}))`, 'i')
+
+  if (debug === true) {
+    console.log(`[debug] Using exclude regex: ${searchDirs} and ${exclude}`)
+  }
 
   if (debug === true) {
     console.log(
@@ -82,11 +80,10 @@ function main() {
   madge(process.cwd(), {
     webpackConfig: path.resolve(__dirname, 'madge.webpack.js'),
     tsConfig: fs.existsSync(tsConfigPath) ? tsConfigPath : undefined,
-    excludeRegExp: [searchDirs, ...exclude, '(^|/)(.(?!.).+)$'],
+    excludeRegExp: [searchDirs, ...exclude],
     fileExtensions: ['js', 'jsx', 'ts', 'tsx']
   }).then((res) => {
     const tree = res.obj()
-    // console.log(tree)
     const entrypoints = Object.keys(tree).filter((f) => {
       return (
         f.startsWith('pages/') ||
