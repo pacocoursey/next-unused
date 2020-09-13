@@ -7,7 +7,6 @@
     "test": "node ../../"
   },
   "next-unused": {
-    "debug": true,
     "include": ["components"],
     "exclude": ["ignore-me"]
   }

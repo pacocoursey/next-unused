@@ -6,6 +6,9 @@
   "bin": {
     "next-unused": "./index.js"
   },
+  "scripts": {
+    "test": "node test"
+  },
   "files": [
     "index.js",
     "madge.webpack.js"
