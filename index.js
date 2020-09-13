@@ -1,116 +1,130 @@
 #!/usr/bin/env node
-const madge = require("madge");
-const path = require("path");
-const packageJSON = require(path.resolve(process.cwd(), "package.json"));
+const madge = require('madge')
+const path = require('path')
+const fs = require('fs')
+const packageJSON = require(path.resolve(process.cwd(), 'package.json'))
 
 try {
-  main();
+  main()
 } catch (e) {
-  console.error("Error while running next-unused:", e);
+  console.error('Error while running next-unused:', e)
 }
 
 function main() {
-  const userConfig = packageJSON["next-unused"] || {};
+  const userConfig = packageJSON['next-unused'] || {}
 
   const {
     debug,
     include = [],
     exclude = [],
-    entrypoints: userEntrypoints = [],
-  } = userConfig;
+    entrypoints: userEntrypoints = []
+  } = userConfig
 
   if (debug) {
     if (include.length) {
-      console.log(`[debug] Found include config: ${include}`);
+      console.log(`[debug] Found include config: ${include}`)
     }
 
     if (exclude.length) {
-      console.log(`[debug] Found exclude config: ${exclude}`);
+      console.log(`[debug] Found exclude config: ${exclude}`)
     }
 
     if (userEntrypoints.length) {
-      console.log(`[debug] Found entrypoints config: ${userEntrypoints}`);
+      console.log(`[debug] Found entrypoints config: ${userEntrypoints}`)
     }
   }
 
   for (const entrypoint of userEntrypoints) {
     if (!include.includes(entrypoint)) {
-      include.push(entrypoint);
+      include.push(entrypoint)
 
       if (debug) {
         console.log(
           `[debug] Entrypoint "${entrypoint}" is missing in includes, adding it`
-        );
+        )
       }
     }
   }
 
-  const userSearchDirs = include.length ? include.join("|") : "";
+  const userSearchDirs = include.length ? include.join('|') : ''
 
   const searchDirs = new RegExp(
     `^(?!(${
-      userSearchDirs.includes("pages") ? "" : "pages|"
+      userSearchDirs.includes('pages') ? '' : 'pages|'
     }${userSearchDirs}))`,
-    "i"
-  );
+    'i'
+  )
 
   if (debug === true) {
-    console.log(`[debug] Using exclude regex: ${[searchDirs, ...exclude]}`);
+    console.log(`[debug] Using exclude regex: ${[searchDirs, ...exclude]}`)
   }
 
-  const madgePath = [
-    path.resolve(process.cwd(), "pages"),
-  ]
+  // Automatically include top level pages/ directory by default
+  const topLevelPagesPath = path.resolve(process.cwd(), 'pages')
+  const madgePath = []
+
+  if (fs.existsSync(topLevelPagesPath)) {
+    madgePath.push(topLevelPagesPath)
+  }
 
   include.forEach((inc) => {
     madgePath.push(path.resolve(process.cwd(), inc))
   })
 
-  madge(madgePath, {
-    webpackConfig: path.resolve(__dirname, "madge.webpack.js"),
-    tsConfig: path.resolve(process.cwd(), "tsconfig.json"),
-    excludeRegExp: [searchDirs, ...exclude, "(^|\/)(\.(?!\.).+)$"],
-    fileExtensions: ["js", "jsx", "ts", "tsx"],
+  if (debug === true) {
+    console.log(
+      `[debug] Searching directories: ${JSON.stringify(madgePath, null, 2)}`
+    )
+  }
+
+  const tsConfigPath = path.resolve(process.cwd(), 'tsconfig.json')
+
+  madge(process.cwd(), {
+    webpackConfig: path.resolve(__dirname, 'madge.webpack.js'),
+    tsConfig: fs.existsSync(tsConfigPath) ? tsConfigPath : undefined,
+    excludeRegExp: [searchDirs, ...exclude, '(^|/)(.(?!.).+)$'],
+    fileExtensions: ['js', 'jsx', 'ts', 'tsx']
   }).then((res) => {
-    const tree = res.obj();
+    const tree = res.obj()
+    // console.log(tree)
     const entrypoints = Object.keys(tree).filter((f) => {
       return (
-        f.startsWith("pages/") ||
-        userEntrypoints.some((x) => f.startsWith(x.includes("/") ? x : `${x}/`))
-      );
-    });
-    if (debug) {
-      console.log("[debug] Found entrypoints");
-      console.log(entrypoints);
-    }
+        f.startsWith('pages/') ||
+        userEntrypoints.some((x) => f.startsWith(x.includes('/') ? x : `${x}/`))
+      )
+    })
     if (!entrypoints.length) {
-      return console.log("No entrypoints found.");
+      return console.log('No entrypoints found.')
     }
-    pruneTree(entrypoints, tree);
-    const unusedFilenames = Object.keys(tree);
+    if (debug) {
+      console.log('[debug] Found entrypoints')
+      console.log(entrypoints)
+    }
+    pruneTree(entrypoints, tree)
+    const unusedFilenames = Object.keys(tree)
     if (!unusedFilenames.length) {
-      console.log("No unused files!");
+      console.log('No unused files!')
     } else {
       console.log(
         `Found ${unusedFilenames.length} unused ${
-          unusedFilenames.length === 1 ? "file" : "files"
+          unusedFilenames.length === 1 ? 'file' : 'files'
         }:`
-      );
-      unusedFilenames.map((f) => console.log(f));
+      )
+      unusedFilenames.map((f) => console.log(f))
     }
-  });
+  })
 }
 
 function pruneTree(subtree, tree) {
-  if (!subtree || subtree.length === 0) return;
+  if (!subtree || subtree.length === 0) return
 
   for (let child of subtree) {
-    const nextSubtree = tree[child];
+    const nextSubtree = tree[child]
 
     if (tree[child]) {
-      delete tree[child];
+      delete tree[child]
     }
 
-    pruneTree(nextSubtree, tree);
+    pruneTree(nextSubtree, tree)
   }
 }
