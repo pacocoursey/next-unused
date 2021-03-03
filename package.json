@@ -14,7 +14,7 @@
     "madge.webpack.js"
   ],
   "dependencies": {
-    "madge": "^3.8.0",
+    "madge": "^4.0.0",
     "ts-loader": "^7.0.0"
   },
   "devDependencies": {
