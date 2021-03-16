@@ -27,6 +27,7 @@ const run = (dirName) => {
   assert.strictEqual(await run('sub-level-src'), 'No unused files!\n')
   assert.strictEqual(await run('with-ts'), 'No unused files!\n')
   assert.strictEqual(await run('without-ts'), 'No unused files!\n')
+  assert.strictEqual(await run('dynamic-import'), 'No unused files!\n')
 
   console.log('All tests passed.')
 })()
