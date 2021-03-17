@@ -15,11 +15,11 @@
   ],
   "dependencies": {
     "madge": "^4.0.1",
-    "ts-loader": "^7.0.0"
+    "ts-loader": "^7.0.0",
+    "typescript": "^4.2.3"
   },
   "devDependencies": {
-    "@types/node": "^13.11.1",
-    "typescript": "^4.2.3"
+    "@types/node": "^13.11.1"
   },
   "author": "@pacocoursey",
   "repository": "pacocoursey/next-unused"
