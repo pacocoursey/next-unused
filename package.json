@@ -18,7 +18,8 @@
     "ts-loader": "^7.0.0"
   },
   "devDependencies": {
-    "@types/node": "^13.11.1"
+    "@types/node": "^13.11.1",
+    "typescript": "^4.2.3"
   },
   "author": "@pacocoursey",
   "repository": "pacocoursey/next-unused"
