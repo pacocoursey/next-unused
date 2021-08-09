@@ -2,17 +2,14 @@
 
 next-unused is an easy way to find unused files in your [Next.js](https://github.com/zeit/next.js) project.
 
-<br />
 
 ## Installation
 
-Make sure you install as a `devDependency`, otherwise you will add 60mb+ to your build.
+Install as a `devDependency`:
 
 ```
 $ yarn add next-unused -D
 ```
-
-<br />
 
 ### Usage
 
@@ -24,9 +21,11 @@ In `package.json`, add a script to find unused files:
 }
 ```
 
-Run the script to list any unused files: `yarn find:unused`.
+Run the script to list any unused files:
 
-<br />
+```
+$ yarn find:unused
+```
 
 ### Configuration
 
@@ -50,8 +49,6 @@ Add a property to your `package.json` to configure next-unused:
 | `include`     | string[] | `['pages']` | list of directories to search through. `pages` is always included      |
 | `exclude`     | string[] | `[]`        | array of RegExp that exclude matching filenames                        |
 | `entrypoints` | string[] | `['pages']` | list of directories to use as entrypoints. `pages` is always included  |
-
-<br />
 
 ### Example
 
@@ -94,8 +91,6 @@ Running `next-unused` will output:
 Found 1 unused file:
 components/image.js
 ```
-
-<br />
 
 ### Credits
 
