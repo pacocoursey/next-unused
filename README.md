@@ -37,7 +37,8 @@ Add a property to your `package.json` to configure next-unused:
     "alias": {},
     "include": [],
     "exclude": [],
-    "entrypoints": []
+    "entrypoints": [],
+    "fileExtensions": []
   }
 }
 ```
@@ -49,6 +50,7 @@ Add a property to your `package.json` to configure next-unused:
 | `include`     | string[] | `['pages']` | list of directories to search through. `pages` is always included      |
 | `exclude`     | string[] | `[]`        | array of RegExp that exclude matching filenames                        |
 | `entrypoints` | string[] | `['pages']` | list of directories to use as entrypoints. `pages` is always included  |
+| `fileExtensions` | string[] | `['js', 'jsx', 'ts', 'tsx']` | List of file extensions to be searched. `js`, `jsx`, `ts`, and `tsx` are always included. |
 
 ### Example
 
