@@ -1,0 +1,13 @@
+{
+  "name": "without-ts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "node ../../"
+  },
+  "next-unused": {
+    "include": ["images"],
+    "fileExtensions":  ["png"]
+  }
+}

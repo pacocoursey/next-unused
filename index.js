@@ -17,7 +17,8 @@ function main() {
     debug,
     include = [],
     exclude = [],
-    entrypoints: userEntrypoints = []
+    entrypoints: userEntrypoints = [],
+    fileExtensions = []
   } = userConfig
 
   if (debug) {
@@ -81,7 +82,7 @@ function main() {
     webpackConfig: path.resolve(__dirname, 'madge.webpack.js'),
     tsConfig: fs.existsSync(tsConfigPath) ? tsConfigPath : undefined,
     excludeRegExp: [searchDirs, ...exclude],
-    fileExtensions: ['js', 'jsx', 'ts', 'tsx']
+    fileExtensions: fileExtensions.concat(['js', 'jsx', 'ts', 'tsx'])
   }).then((res) => {
     const tree = res.obj()
     const entrypoints = Object.keys(tree).filter((f) => {
