@@ -1,3 +1,6 @@
+> [!IMPORTANT]  
+> This project is no longer maintained. We recommend using [Knip](https://github.com/webpro-nl/knip) instead.
+
 # next-unused
 
 next-unused is an easy way to find unused files in your [Next.js](https://github.com/zeit/next.js) project.
